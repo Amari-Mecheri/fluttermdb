@@ -25,3 +25,24 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+    // if (maxSize > 0) {
+    //   Image imToBeResized = Image.memory(im);
+    //   double biggest = imToBeResized.height!;
+
+    //   if (imToBeResized.width! > imToBeResized.height!) {
+    //     biggest = imToBeResized.width!;
+    //   }
+
+    //   if (biggest > maxSize) {
+    //     double ratio = biggest / maxSize;
+    //     var im2 = Image(
+    //       image: ResizeImage(
+    //         MemoryImage(im),
+    //         width: (imToBeResized.width!/ratio) as int?,
+    //         height: (imToBeResized.height!/ratio) as int?,
+    //       ),
+    //     );
+    //     im = im2.
+    //   }
+    // }

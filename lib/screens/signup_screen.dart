@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,8 +37,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _usernameController.dispose();
   }
 
-  void selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
+  void selectImage(double? maxSize) async {
+    Uint8List im = await pickImage(ImageSource.gallery, maxSize);
     setState(() {
       _image = im;
     });
@@ -85,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   bottom: -10,
                   left: 80,
                   child: IconButton(
-                    onPressed: selectImage,
+                    onPressed: () => selectImage(500),
                     icon: const Icon(
                       Icons.add_a_photo,
                     ),
