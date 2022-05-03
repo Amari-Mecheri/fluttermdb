@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttermdb/models/post.dart';
 import 'package:fluttermdb/ressources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -57,6 +58,36 @@ class FirestoreMethods {
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<void> postComment(String postId, String text, String uid, String name,
+      String profilePic) async {
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'correctId': commentId,
+          'datePublished': DateTime.now(),
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
   }
 }

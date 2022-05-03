@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttermdb/models/user.dart';
 import 'package:fluttermdb/providers/user_provider.dart';
 import 'package:fluttermdb/ressources/firestore_methods.dart';
+import 'package:fluttermdb/screens/comments_screen.dart';
 import 'package:fluttermdb/utils/colors.dart';
 import 'package:fluttermdb/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PostCard extends StatefulWidget {
-  final snap;
+  final dynamic snap;
   const PostCard({
     Key? key,
     required this.snap,
@@ -22,7 +23,8 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    //final User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
@@ -39,9 +41,11 @@ class _PostCardState extends State<PostCard> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(
-                    widget.snap['profImage'],
-                  ),
+                  backgroundImage: widget.snap['profImage'].isNotEmpty
+                      ? NetworkImage(
+                          widget.snap['profImage'],
+                        )
+                      : null,
                 ),
                 Expanded(
                   child: Padding(
@@ -52,7 +56,7 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Text(
                           widget.snap['username'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -94,7 +98,7 @@ class _PostCardState extends State<PostCard> {
             onDoubleTap: () async {
               await FirestoreMethods().likePost(
                 widget.snap['postId'],
-                user.uid,
+                userProvider.getUser.uid,
                 widget.snap['likes'],
               );
               setState(() {
@@ -136,19 +140,20 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               LikeAnimation(
-                isAnimating: widget.snap['likes'].contains(user.uid),
+                isAnimating:
+                    widget.snap['likes'].contains(userProvider.getUser.uid),
                 child: IconButton(
                   onPressed: () async {
                     await FirestoreMethods().likePost(
                       widget.snap['postId'],
-                      user.uid,
+                      userProvider.getUser.uid,
                       widget.snap['likes'],
                     );
                     setState(() {
                       isLikeAnimating = true;
                     });
                   },
-                  icon: widget.snap['likes'].contains(user.uid)
+                  icon: widget.snap['likes'].contains(userProvider.getUser.uid)
                       ? const Icon(
                           Icons.favorite,
                           color: Colors.red,
@@ -159,7 +164,13 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(
+                      snap: widget.snap,
+                    ),
+                  ),
+                ),
                 icon: const Icon(
                   Icons.comment_outlined,
                 ),
