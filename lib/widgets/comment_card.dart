@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 
 class CommentCard extends StatefulWidget {
   final dynamic snap;
-  const CommentCard({
-    Key? key,
-    required this.snap,
-  }) : super(key: key);
+  final dynamic postId;
+  const CommentCard({Key? key, required this.snap, required this.postId})
+      : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -77,45 +76,52 @@ class _CommentCardState extends State<CommentCard> {
                       DateFormat.yMMMd()
                           .add_jms()
                           .format(widget.snap['datePublished'].toDate()),
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w400),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: LikeAnimation(
-              isAnimating: widget.snap['likes'] != null &&
-                  widget.snap['likes'].contains(userProvider.getUser.uid),
-              child: IconButton(
-                onPressed: () async {
-                  await FirestoreMethods().likeComment(
-                    widget.snap['commentId'],
-                    userProvider.getUser.uid,
-                    widget.snap['likes'],
-                  );
-                  setState(() {
-                    isLikeAnimating = true;
-                  });
-                },
-                icon: widget.snap['likes'] != null &&
-                        widget.snap['likes'].contains(userProvider.getUser.uid)
-                    ? const Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                        size: 26,
-                      )
-                    : const Icon(
-                        Icons.favorite_border,
-                        size: 26,
-                      ),
-              ),
+          Row(children: [
+            Text(
+              '${widget.snap['likes'].length} likes',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
-            //const Icon(Icons.favorite, size: 26),
-          )
+            Container(
+              padding: const EdgeInsets.all(8),
+              child: LikeAnimation(
+                isAnimating: widget.snap['likes'] != null &&
+                    widget.snap['likes'].contains(userProvider.getUser.uid),
+                child: IconButton(
+                  onPressed: () async {
+                    await FirestoreMethods().likeComment(
+                      widget.postId,
+                      widget.snap['commentId'],
+                      userProvider.getUser.uid,
+                      widget.snap['likes'],
+                    );
+                    setState(() {
+                      isLikeAnimating = true;
+                    });
+                  },
+                  icon: widget.snap['likes'] != null &&
+                          widget.snap['likes']
+                              .contains(userProvider.getUser.uid)
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                          size: 26,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                          size: 26,
+                        ),
+                ),
+              ),
+              //const Icon(Icons.favorite, size: 26),
+            ),
+          ])
         ],
       ),
     );

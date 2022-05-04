@@ -61,34 +61,40 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                          ),
-                          shrinkWrap: true,
-                          children: ['Delete']
-                              .map(
-                                (e) => InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 32, horizontal: 16),
-                                    child: Text(e),
-                                  ),
+                widget.snap['username'] == userProvider.getUser.username
+                    ? IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: ListView(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
                                 ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                ),
+                                shrinkWrap: true,
+                                children: ['Delete']
+                                    .map(
+                                      (e) => InkWell(
+                                        onTap: () async {
+                                          await FirestoreMethods().deletePost(
+                                              widget.snap['postId']);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 32, horizontal: 16),
+                                          child: Text(e),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      )
+                    : const Text(''),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
-import 'dart:typed_data' show Uint8List;
+import 'dart:typed_data' show ByteData, Uint8List;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttermdb/ressources/auth_methods.dart';
 import 'package:fluttermdb/utils/colors.dart';
@@ -26,7 +27,23 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   Uint8List? _image;
+
   bool _isLoading = false;
+  late ByteData imageData;
+
+// @override
+// void initState() {
+//   rootBundle.load('assets/test.jpg')
+//     .then((data) => setState(() => this.imageData = data));
+// }
+  @override
+  void initState() {
+    super.initState();
+    rootBundle.load('assets/default-profile.jpg').then((data) => setState(() {
+          imageData = data;
+          _image = imageData.buffer.asUint8List();
+        }));
+  }
 
   @override
   void dispose() {
@@ -70,16 +87,16 @@ class _SignupScreenState extends State<SignupScreen> {
             //Circular widget to accept and show our selected file
             Stack(
               children: [
-                _image != null
-                    ? CircleAvatar(
-                        radius: 64,
-                        backgroundImage: MemoryImage(_image!),
-                      )
-                    : CircleAvatar(
-                        radius: 64,
-                        backgroundImage:
-                            Image.asset('assets/default-profile.jpg').image,
-                      ),
+                //_image != null ?
+                CircleAvatar(
+                  radius: 64,
+                  backgroundImage: MemoryImage(_image!),
+                ),
+                // : CircleAvatar(
+                //     radius: 64,
+                //     backgroundImage:
+                //         Image.asset('assets/default-profile.jpg').image,
+                //   ),
                 Positioned(
                   bottom: -10,
                   left: 80,

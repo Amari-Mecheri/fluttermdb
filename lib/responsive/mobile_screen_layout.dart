@@ -54,15 +54,15 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.search,
-              //color: _page == 0 ? primaryColor : secondaryColor,
+              Icons.home,
             ),
             label: '',
             backgroundColor: primaryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.search,
+              //color: _page == 0 ? primaryColor : secondaryColor,
             ),
             label: '',
             backgroundColor: primaryColor,
