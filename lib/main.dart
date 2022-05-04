@@ -7,7 +7,6 @@ import 'package:fluttermdb/responsive/mobile_screen_layout.dart';
 import 'package:fluttermdb/responsive/responsive_layout_screen.dart';
 import 'package:fluttermdb/responsive/web_screen_layout.dart';
 import 'package:fluttermdb/screens/login_screen.dart';
-import 'package:fluttermdb/screens/signup_screen.dart';
 import 'package:fluttermdb/utils/colors.dart';
 import 'package:provider/provider.dart';
 

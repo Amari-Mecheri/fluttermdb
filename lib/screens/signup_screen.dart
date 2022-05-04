@@ -103,6 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 if (val!.isEmpty) {
                   return 'Enter a username';
                 }
+                return '';
               },
               textEditingController: _usernameController,
             ),
@@ -117,6 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 if (val!.isEmpty || !val.isValidEmail) {
                   return 'Enter valid email';
                 }
+                return '';
               },
               textInputType: TextInputType.emailAddress,
             ),
@@ -131,6 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 if (val!.isEmpty || !val.isValidPassword) {
                   return 'Enter valid email';
                 }
+                return '';
               },
               textInputType: TextInputType.text,
               isPass: true,
@@ -146,6 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   if (val!.isEmpty) {
                     return 'Enter a bio';
                   }
+                  return '';
                 },
                 textEditingController: _bioController),
             const SizedBox(

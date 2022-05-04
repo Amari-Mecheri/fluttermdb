@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermdb/models/user.dart';
 import 'package:fluttermdb/providers/user_provider.dart';
 import 'package:fluttermdb/ressources/firestore_methods.dart';
 import 'package:fluttermdb/screens/comments_screen.dart';
@@ -25,6 +25,7 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     //final User user = Provider.of<UserProvider>(context).getUser;
+
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
@@ -41,11 +42,9 @@ class _PostCardState extends State<PostCard> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: widget.snap['profImage'].isNotEmpty
-                      ? NetworkImage(
-                          widget.snap['profImage'],
-                        )
-                      : null,
+                  backgroundImage: NetworkImage(
+                    widget.snap['profImage'],
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -238,24 +237,44 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: const Text(
-                      'View all 200 comments',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: secondaryColor,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentsScreen(
+                        snap: widget.snap,
                       ),
                     ),
                   ),
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('posts')
+                            .doc(widget.snap['postId'])
+                            .collection('comments')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return Text(
+                            'View all ${(snapshot.data! as dynamic).docs.length} comments',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: secondaryColor,
+                            ),
+                          );
+                        },
+                      )),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    DateFormat.yMMMd().format(
-                      widget.snap['datePublished'].toDate(),
-                    ),
+                    DateFormat.yMMMd().add_jms().format(
+                          widget.snap['datePublished'].toDate(),
+                        ),
                     style: const TextStyle(
                       fontSize: 16,
                       color: secondaryColor,

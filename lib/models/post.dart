@@ -8,7 +8,7 @@ class Post {
   final DateTime datePublished;
   final String postUrl;
   final String profImage;
-  final likes;
+  final dynamic likes;
 
   const Post({
     required this.description,

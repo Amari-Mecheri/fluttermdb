@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermdb/utils/colors.dart';
 
-import '../screens/add_post_screen.dart';
 import '../utils/global_variables.dart';
 // import 'package:provider/provider.dart';
 

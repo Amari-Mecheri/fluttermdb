@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermdb/models/user.dart';
 import 'package:fluttermdb/providers/user_provider.dart';
+import 'package:fluttermdb/ressources/firestore_methods.dart';
 import 'package:fluttermdb/utils/colors.dart';
+import 'package:fluttermdb/widgets/like_animation.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({Key? key}) : super(key: key);
+  final dynamic snap;
+  const CommentCard({
+    Key? key,
+    required this.snap,
+  }) : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+  bool isLikeAnimating = false;
+
   @override
   Widget build(BuildContext context) {
-    //final User user = Provider.of<UserProvider>(context).getUser;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return Container(
@@ -24,9 +31,9 @@ class _CommentCardState extends State<CommentCard> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundImage: NetworkImage(
-              'https://images.unsplash.com/photo-1638913976381-5b8ed66c36d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60',
+              widget.snap['profilePic'],
             ),
             radius: 18,
           ),
@@ -43,7 +50,7 @@ class _CommentCardState extends State<CommentCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: userProvider.getUser.username,
+                          text: widget.snap['name'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: primaryColor,
@@ -55,21 +62,23 @@ class _CommentCardState extends State<CommentCard> {
                             color: primaryColor,
                           ),
                         ),
-                        const TextSpan(
-                          text: 'some description to insert',
-                          style: TextStyle(
+                        TextSpan(
+                          text: widget.snap['text'],
+                          style: const TextStyle(
                             color: primaryColor,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 4),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      '03/05/1972',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                      DateFormat.yMMMd()
+                          .add_jms()
+                          .format(widget.snap['datePublished'].toDate()),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                   ),
                 ],
@@ -78,7 +87,34 @@ class _CommentCardState extends State<CommentCard> {
           ),
           Container(
             padding: const EdgeInsets.all(8),
-            child: const Icon(Icons.favorite, size: 26),
+            child: LikeAnimation(
+              isAnimating: widget.snap['likes'] != null &&
+                  widget.snap['likes'].contains(userProvider.getUser.uid),
+              child: IconButton(
+                onPressed: () async {
+                  await FirestoreMethods().likeComment(
+                    widget.snap['commentId'],
+                    userProvider.getUser.uid,
+                    widget.snap['likes'],
+                  );
+                  setState(() {
+                    isLikeAnimating = true;
+                  });
+                },
+                icon: widget.snap['likes'] != null &&
+                        widget.snap['likes'].contains(userProvider.getUser.uid)
+                    ? const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                        size: 26,
+                      )
+                    : const Icon(
+                        Icons.favorite_border,
+                        size: 26,
+                      ),
+              ),
+            ),
+            //const Icon(Icons.favorite, size: 26),
           )
         ],
       ),
