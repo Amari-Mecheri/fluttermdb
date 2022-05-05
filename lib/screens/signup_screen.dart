@@ -87,16 +87,16 @@ class _SignupScreenState extends State<SignupScreen> {
             //Circular widget to accept and show our selected file
             Stack(
               children: [
-                //_image != null ?
-                CircleAvatar(
-                  radius: 64,
-                  backgroundImage: MemoryImage(_image!),
-                ),
-                // : CircleAvatar(
-                //     radius: 64,
-                //     backgroundImage:
-                //         Image.asset('assets/default-profile.jpg').image,
-                //   ),
+                _image != null
+                    ? CircleAvatar(
+                        radius: 64,
+                        backgroundImage: MemoryImage(_image!),
+                      )
+                    : const CircleAvatar(
+                        radius: 64,
+                        // backgroundImage:
+                        //     Image.asset('assets/default-profile.jpg').image,
+                      ),
                 Positioned(
                   bottom: -10,
                   left: 80,
@@ -214,7 +214,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                   child: Container(
                     child: const Text(
-                      "Log in.",
+                      " Log in.",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     padding: const EdgeInsets.symmetric(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttermdb/screens/signup_screen.dart';
 import 'package:fluttermdb/utils/colors.dart';
+import 'package:fluttermdb/utils/global_variables.dart';
 import 'package:fluttermdb/widgets/text_field_input.dart';
 
 import '../responsive/mobile_screen_layout.dart';
@@ -34,7 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: MediaQuery.of(context).size.width > webScreenSize
+            ? EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 3)
+            : const EdgeInsets.symmetric(horizontal: 32),
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -115,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Container(
                     child: const Text(
-                      "Sign up.",
+                      " Sign up.",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     padding: const EdgeInsets.symmetric(

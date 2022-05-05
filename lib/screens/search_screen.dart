@@ -14,7 +14,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
-  bool isShowUsers = false;
+  bool isShowUsers = true;
 
   @override
   void dispose() {
@@ -33,15 +33,18 @@ class _SearchScreenState extends State<SearchScreen> {
             labelText: 'Search for a user',
           ),
           onChanged: (String _) {
-            if (searchController.text != '') {
-              setState(() {
-                isShowUsers = true;
-              });
-            } else {
-              setState(() {
-                isShowUsers = false;
-              });
-            }
+            setState(() {
+              isShowUsers = true;
+            });
+            // if (searchController.text != '') {
+            //   setState(() {
+            //     isShowUsers = true;
+            //   });
+            // } else {
+            //   setState(() {
+            //     isShowUsers = false;
+            //   });
+            // }
           },
         ),
       ),
@@ -60,25 +63,34 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
+                List<dynamic> listUsers = <dynamic>[];
+                if ((snapshot.data! as dynamic).docs.length > 0) {
+                  listUsers = (snapshot.data! as dynamic).docs;
+                  listUsers = listUsers
+                      .where((x) =>
+                          x['username'].startsWith(searchController.text))
+                      .toList();
+                  //print(listUsers[0]);
+                }
                 return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  //itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemCount: listUsers.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ProfileScreen(
-                              uid: (snapshot.data! as dynamic).docs[index]
-                                  ['uid']),
+                          builder: (context) =>
+                              ProfileScreen(uid: listUsers[index]['uid']),
                         ),
                       ),
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
-                            (snapshot.data! as dynamic).docs[index]['photoUrl'],
+                            listUsers[index]['photoUrl'],
                           ),
                         ),
                         title: Text(
-                          (snapshot.data! as dynamic).docs[index]['username'],
+                          listUsers[index]['username'],
                         ),
                       ),
                     );
@@ -104,8 +116,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     (index % 7 == 0) ? 2 : 1,
                     (index % 7 == 0) ? 2 : 1,
                   ),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 4,
+                  crossAxisSpacing: 4,
                 );
               },
             ),

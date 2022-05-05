@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermdb/providers/user_provider.dart';
 import 'package:fluttermdb/ressources/firestore_methods.dart';
@@ -23,7 +24,7 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    //final UserProvider userProvider = Provider.of<UserProvider>(context);
     //final User user = Provider.of<UserProvider>(context).getUser;
 
     return Container(
@@ -61,7 +62,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                widget.snap['username'] == userProvider.getUser.username
+                widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid
                     ? IconButton(
                         onPressed: () {
                           showDialog(
@@ -103,7 +104,7 @@ class _PostCardState extends State<PostCard> {
             onDoubleTap: () async {
               await FirestoreMethods().likePost(
                 widget.snap['postId'],
-                userProvider.getUser.uid,
+                FirebaseAuth.instance.currentUser!.uid,
                 widget.snap['likes'],
               );
               setState(() {
@@ -145,20 +146,21 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               LikeAnimation(
-                isAnimating:
-                    widget.snap['likes'].contains(userProvider.getUser.uid),
+                isAnimating: widget.snap['likes']
+                    .contains(FirebaseAuth.instance.currentUser!.uid),
                 child: IconButton(
                   onPressed: () async {
                     await FirestoreMethods().likePost(
                       widget.snap['postId'],
-                      userProvider.getUser.uid,
+                      FirebaseAuth.instance.currentUser!.uid,
                       widget.snap['likes'],
                     );
                     setState(() {
                       isLikeAnimating = true;
                     });
                   },
-                  icon: widget.snap['likes'].contains(userProvider.getUser.uid)
+                  icon: widget.snap['likes']
+                          .contains(FirebaseAuth.instance.currentUser!.uid)
                       ? const Icon(
                           Icons.favorite,
                           color: Colors.red,
@@ -251,29 +253,30 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                   child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('posts')
-                            .doc(widget.snap['postId'])
-                            .collection('comments')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return Text(
-                            'View all ${(snapshot.data! as dynamic).docs.length} comments',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: secondaryColor,
-                            ),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.snap['postId'])
+                          .collection('comments')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
-                        },
-                      )),
+                        }
+                        return Text(
+                          'View all ${(snapshot.data! as dynamic).docs.length} comments',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: secondaryColor,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
