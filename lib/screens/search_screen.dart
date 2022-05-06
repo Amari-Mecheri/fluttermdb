@@ -15,7 +15,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
-  bool isShowUsers = false;
+  bool isShowUsers = true;
 
   @override
   void dispose() {
@@ -37,15 +37,15 @@ class _SearchScreenState extends State<SearchScreen> {
             setState(() {
               isShowUsers = true;
             });
-            if (searchController.text != '') {
-              setState(() {
-                isShowUsers = true;
-              });
-            } else {
-              setState(() {
-                isShowUsers = false;
-              });
-            }
+            // if (searchController.text != '') {
+            //   setState(() {
+            //     isShowUsers = true;
+            //   });
+            // } else {
+            //   setState(() {
+            //     isShowUsers = false;
+            //   });
+            // }
           },
         ),
       ),

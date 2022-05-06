@@ -34,7 +34,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 child: const Text('Take a pĥoto'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.camera, 500);
+                  Uint8List file = await pickImage(ImageSource.camera, 1000);
                   setState(() {
                     _file = file;
                   });
@@ -45,7 +45,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 child: const Text('Chose from gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery, 500);
+                  Uint8List file = await pickImage(ImageSource.gallery, 1000);
                   setState(() {
                     _file = file;
                   });
