@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermdb/screens/profile_screen.dart';
 import 'package:fluttermdb/utils/colors.dart';
+import 'package:fluttermdb/utils/global_variables.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
@@ -14,7 +15,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
-  bool isShowUsers = true;
+  bool isShowUsers = false;
 
   @override
   void dispose() {
@@ -36,15 +37,15 @@ class _SearchScreenState extends State<SearchScreen> {
             setState(() {
               isShowUsers = true;
             });
-            // if (searchController.text != '') {
-            //   setState(() {
-            //     isShowUsers = true;
-            //   });
-            // } else {
-            //   setState(() {
-            //     isShowUsers = false;
-            //   });
-            // }
+            if (searchController.text != '') {
+              setState(() {
+                isShowUsers = true;
+              });
+            } else {
+              setState(() {
+                isShowUsers = false;
+              });
+            }
           },
         ),
       ),
@@ -101,6 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
           : FutureBuilder(
               future: FirebaseFirestore.instance.collection('posts').get(),
               builder: (context, snapshot) {
+                final width = MediaQuery.of(context).size.width;
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -112,12 +114,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) => Image.network(
                       (snapshot.data! as dynamic).docs[index]['postUrl']),
-                  staggeredTileBuilder: (index) => StaggeredTile.count(
-                    (index % 7 == 0) ? 2 : 1,
-                    (index % 7 == 0) ? 2 : 1,
-                  ),
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
+                  staggeredTileBuilder: (index) => width > webScreenSize
+                      ? StaggeredTile.count(
+                          (index % 7 == 0) ? 1 : 1,
+                          (index % 7 == 0) ? 1 : 1,
+                        )
+                      : StaggeredTile.count(
+                          (index % 7 == 0) ? 2 : 1,
+                          (index % 7 == 0) ? 2 : 1,
+                        ),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
                 );
               },
             ),

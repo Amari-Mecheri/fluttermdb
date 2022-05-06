@@ -12,6 +12,6 @@ List<Widget> homeScreenItems = [
   const FeedScreen(),
   const SearchScreen(),
   const AddPostScreen(),
-  const Text('notif'),
+  const Text('Notifications not implemented yet!'),
   ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid),
 ];

@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermdb/providers/user_provider.dart';
 import 'package:fluttermdb/ressources/firestore_methods.dart';
 import 'package:fluttermdb/screens/comments_screen.dart';
 import 'package:fluttermdb/utils/colors.dart';
+import 'package:fluttermdb/utils/global_variables.dart';
 import 'package:fluttermdb/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class PostCard extends StatefulWidget {
   final dynamic snap;
@@ -26,9 +25,15 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     //final UserProvider userProvider = Provider.of<UserProvider>(context);
     //final User user = Provider.of<UserProvider>(context).getUser;
+    final width = MediaQuery.of(context).size.width;
 
     return Container(
-      color: mobileBackgroundColor,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: width > webScreenSize ? secondaryColor : mobileBackgroundColor,
+        ),
+      ),
+      //color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),

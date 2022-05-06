@@ -73,6 +73,8 @@ class AuthMethods {
     } catch (err) {
       res = err.toString();
     }
+    // print(email);
+    // print(password);
     return res;
   }
 
