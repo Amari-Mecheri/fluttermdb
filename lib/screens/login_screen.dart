@@ -33,106 +33,107 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Container(
-        padding: MediaQuery.of(context).size.width > webScreenSize
-            ? EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 3)
-            : const EdgeInsets.symmetric(horizontal: 32),
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //svg image
-            SvgPicture.asset(
-              'assets/partytown-icon.svg',
-              color: primaryColor,
-              height: 64,
-            ),
-            const SizedBox(
-              height: 64,
-            ),
-            //text field input for email
-            TextFieldInput(
-              textEditingController: _emailController,
-              hintText: 'Enter your email',
-              textInputType: TextInputType.emailAddress,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            //text field input for password
-            TextFieldInput(
-              textEditingController: _passwordController,
-              hintText: 'Enter your password',
-              textInputType: TextInputType.text,
-              isPass: true,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            //button login
-            InkWell(
-              onTap: logInUser,
-              child: Container(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(color: primaryColor),
-                      )
-                    : const Text('Log in'),
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: const ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: MediaQuery.of(context).size.width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //svg image
+              SvgPicture.asset(
+                'assets/partytown-icon.svg',
+                color: primaryColor,
+                height: 64,
+              ),
+              const SizedBox(
+                height: 64,
+              ),
+              //text field input for email
+              TextFieldInput(
+                textEditingController: _emailController,
+                hintText: 'Enter your email',
+                textInputType: TextInputType.emailAddress,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              //text field input for password
+              TextFieldInput(
+                textEditingController: _passwordController,
+                hintText: 'Enter your password',
+                textInputType: TextInputType.text,
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              //button login
+              InkWell(
+                onTap: logInUser,
+                child: Container(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(color: primaryColor),
+                        )
+                      : const Text('Log in'),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
                     ),
+                    color: blueColor,
                   ),
-                  color: blueColor,
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            //Flexible(child: Container(), flex: 2),
-            //Transitioning to signing up
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: const Text("Don't have an account?"),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignupScreen()),
-                    );
-                  },
-                  child: Container(
-                    child: const Text(
-                      " Sign up.",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+              const SizedBox(
+                height: 12,
+              ),
+              //Flexible(child: Container(), flex: 2),
+              //Transitioning to signing up
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: const Text("Don't have an account?"),
                     padding: const EdgeInsets.symmetric(
                       vertical: 8,
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupScreen()),
+                      );
+                    },
+                    child: Container(
+                      child: const Text(
+                        " Sign up.",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Future<void> logInUser() async {
