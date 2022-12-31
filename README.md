@@ -1,6 +1,6 @@
 # fluttermdb
 
-A new Flutter project.
+A first fullstack project with Flutter and Firebase
 
 ## Getting Started
 
